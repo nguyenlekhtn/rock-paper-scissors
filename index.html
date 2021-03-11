@@ -3,78 +3,15 @@
 <head>
   <title>Page Title</title>
   <meta charset="UTF-8"/>
+  <script type="text/javascript" src="script1.js" defer></script>
 </head>
 <body>
-  <script>
-    // Your JavaScript goes here!
-    // randomly return either ‘Rock’, ‘Paper’ or ‘Scissors’ for a computer play 
-    function computerPlay() {
-        let dice = Math.random()*3;
-        if (dice < 1) return "Rock";
-        else if (dice < 2) return "Paper";
-        else return "Scissors";
-    }
-
-    // return result of a “rock paper scissors” play, return 1 of A win, -1 of B win, 0 if draw
-    function playRound(playerSelection, computerSelection) {
-        let intResult;
-        playerSelection = capitalize(playerSelection);
-        if (playerSelection == computerSelection) intResult = 0;
-        else if ((playerSelection == "Rock" 
-                && computerSelection == "Paper") ||
-                (playerSelection == "Paper" 
-                && computerSelection == "Scissors") ||
-                (playerSelection == "Scissors" 
-                && computerSelection == "Rock"))  {
-            intResult = -1;
-        }
-        else intResult = 1;
-
-        if(intResult == 1) {
-          console.log(`You win! ${playerSelection} beats ${computerSelection}`);
-        }
-        else if (intResult == -1) {
-          console.log(`You lose! ${computerSelection} beats ${playerSelection}`);
-        }
-        else if (intResult == 0) {
-          console.log(`Draw! Both do ${playerSelection}`);
-        }
-        else {
-          console.log("intResult has wrong value");
-        }
-
-        return intResult;
-    }
-
-    function game() {
-      let i;
-      let winRounds = 0;
-      let lostRounds = 0;
-      let drawRounds = 0;
-      let roundResult;
-      let playerSelection, computerSelection;
-      for (i = 0; i < 5; i++) {
-        // Promt for player selection
-        playerSelection = prompt("Rock, Paper or Scissors? ");
-        computerSelection = computerPlay();
-        roundResult = playRound(playerSelection, computerSelection );
-        if (roundResult == 1) winRounds++;
-        else if (roundResult == -1) lostRounds++;
-        else drawRounds++
-      }
-
-      console.log(`You win ${winRounds}, lose ${lostRounds}, draw ${drawRounds}. Final result`);
-      if (winRounds > lostRounds) console.log('You are the winner!!');
-      else console.log("You sucked!!")
-
-    }
-
-    function capitalize(str) {
-      let arrayStr = [...str.toLowerCase()];
-      arrayStr[0] = arrayStr[0].toUpperCase();
-      return arrayStr.join("");
-
-    }
-  </script>
+  <div class="container">
+    <button name="Rock">Rock</button>
+    <button name="Paper">Paper</button>
+    <button name="Scissors">Scissors</button>
+    <div class="results"></div>
+  
+  </div>
 </body>
 </html>
