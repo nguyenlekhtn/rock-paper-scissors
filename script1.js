@@ -3,9 +3,14 @@ function playRound(e) {
   let intResult;
   const results = document.querySelector("div.results");
   
+  // make playerSelection case-insensitive
   playerSelection = capitalize(e.toElement.name);
   console.log(playerSelection);
+
+  // create computerSelection
   computerSelection = computerPlay();
+
+  // Perform the comparasion, 0 if draw, -1 if lose, 1 if win
   if (playerSelection == computerSelection) intResult = 0;
   else if ((playerSelection == "Rock"
     && computerSelection == "Paper") ||
@@ -17,6 +22,7 @@ function playRound(e) {
   }
   else intResult = 1;
 
+  
   if (intResult == 1) {
     results.textContent = `You win! ${playerSelection} beats ${computerSelection}`;
   }
