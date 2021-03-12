@@ -1,11 +1,16 @@
+// const results = document.querySelector("div.results");
+let playerScore = 0; 
+let computeScore = 0;
+
 
 function playRound(e) {
   let intResult;
-  const results = document.querySelector("div.results");
+
+  const result = document.querySelector("div.results");
+
   
   // make playerSelection case-insensitive
   playerSelection = capitalize(e.toElement.name);
-  console.log(playerSelection);
 
   // create computerSelection
   computerSelection = computerPlay();
@@ -22,19 +27,30 @@ function playRound(e) {
   }
   else intResult = 1;
 
-  
+
   if (intResult == 1) {
-    results.textContent = `You win! ${playerSelection} beats ${computerSelection}`;
+    playerScore++;
+
   }
   else if (intResult == -1) {
-    results.textContent = `You lose! ${computerSelection} beats ${playerSelection}`;
+    computeScore++;
+
   }
-  else if (intResult == 0) {
-    results.textContent = `Draw! Both do ${playerSelection}`;
+  
+
+  
+  result.textContent = `Player: ${playerSelection}, computer: ${computerSelection}  =>   ${(intResult == 1) ? "Player" : (intResult == -1) ? "Computer" : "No one"} wins.
+  
+  Player score: ${playerScore}, computer score: ${computeScore}`;
+
+  if(playerScore == 5 || computeScore == 5) {
+    const p = document.createElement('p');
+    p.textContent = (playerScore == 5) ? "Player win" : "Player lose";
+    result.appendChild(p);
   }
-  else {
-    results.textContent = `Something is wrong`;
-  }
+
+  // results.appendChild(result);
+
 }
 
 
@@ -52,8 +68,22 @@ function computerPlay() {
   else return "Scissors";
 }
 
-const buttons = document.querySelectorAll('button');
+function resetGame() {
+  playerScore = 0;
+  computeScore = 0;
+  const div = document.querySelector('div.results');
+  div.textContent = `Player score: ${playerScore}, computer score: ${computeScore}`;
+}
+
+const buttons = document.querySelectorAll('button.play');
+
+
+
 buttons.forEach(button => {
   button.addEventListener('click', playRound);
 })
+
+const reset = document.querySelector(`button[name="Reset"]`);
+reset.addEventListener('click', resetGame);
+
 

@@ -4,12 +4,23 @@
   <title>Page Title</title>
   <meta charset="UTF-8"/>
   <script type="text/javascript" src="script1.js" defer></script>
+  <style>
+    button[name="Reset"] {
+      margin: 0 10px;
+    }
+
+    div.results {
+      white-space: pre-line; 
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <button name="Rock">Rock</button>
-    <button name="Paper">Paper</button>
-    <button name="Scissors">Scissors</button>
+    <button name="Rock" class="play">Rock</button>
+    <button name="Paper" class="play">Paper</button>
+    <button name="Scissors" class="play">Scissors</button>
+    <button name="Reset" class="tool">Reset</button>
     <div class="results"></div>
   
   </div>
