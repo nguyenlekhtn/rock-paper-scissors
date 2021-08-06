@@ -1,0 +1,88 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1000px;
+  width: 90%;
+  margin: 0 auto;
+  height: 100vh;
+}
+
+.container-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#reset {
+  align-self: flex-start;
+}
+
+.side {
+  margin-bottom: 2em;
+}
+
+/* Buttons */
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+}
+
+.selection {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  border: none;
+  background-color: inherit;
+  transition: all 0.3s ease-in-out;
+}
+
+.side--player .selection {
+  cursor: pointer;
+}
+
+.selected {
+  /* animation: selected 2s ease-in-out; */
+  transform: scale(1.2);
+  outline: 3px solid orangered;
+  outline-offset: 3px;
+}
+
+/* @keyframes selected {
+  0% {
+    transform: none;
+    outline: none;
+    outline-offset: 0;
+  }
+
+  100% {
+    
+  }
+} */
+
+[data-select='rock'] {
+  background-image: url('img/rock.png');
+}
+
+[data-select='paper'] {
+  background-image: url('img/paper.png');
+}
+
+[data-select='scissors'] {
+  background-image: url('img/scissors.png');
+}
+
+/* Game result */
+#result {
+  font-size: 2em;
+  color: red;
+  font-weight: 700;
+}

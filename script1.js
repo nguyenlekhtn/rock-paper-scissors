@@ -1,89 +1,119 @@
+const selections = [...document.querySelectorAll('.side--player .selection')];
+const scoreBoard = document.getElementById('scoreBoard');
+const reset = document.getElementById('reset');
+const resultDiv = document.getElementById('result');
+const roundResult = document.getElementById('roundResult');
+
 // const results = document.querySelector("div.results");
-let playerScore = 0; 
-let computeScore = 0;
 
-
-function playRound(e) {
-  let intResult;
-
-  const result = document.querySelector("div.results");
-
-  
-  // make playerSelection case-insensitive
-  playerSelection = capitalize(e.toElement.name);
-
-  // create computerSelection
-  computerSelection = computerPlay();
-
-  // Perform the comparasion, 0 if draw, -1 if lose, 1 if win
-  if (playerSelection == computerSelection) intResult = 0;
-  else if ((playerSelection == "Rock"
-    && computerSelection == "Paper") ||
-    (playerSelection == "Paper"
-      && computerSelection == "Scissors") ||
-    (playerSelection == "Scissors"
-      && computerSelection == "Rock")) {
-    intResult = -1;
-  }
-  else intResult = 1;
-
-
-  if (intResult == 1) {
-    playerScore++;
-
-  }
-  else if (intResult == -1) {
-    computeScore++;
-
-  }
-  
-
-  
-  result.textContent = `Player: ${playerSelection}, computer: ${computerSelection}  =>   ${(intResult == 1) ? "Player" : (intResult == -1) ? "Computer" : "No one"} wins.
-  
-  Player score: ${playerScore}, computer score: ${computeScore}`;
-
-  if(playerScore == 5 || computeScore == 5) {
-    const p = document.createElement('p');
-    p.textContent = (playerScore == 5) ? "Player win" : "Player lose";
-    result.appendChild(p);
-  }
-
-  // results.appendChild(result);
-
+function getRoundResult(playerSelection, computerSelection) {
+  if (playerSelection === computerSelection) return 'draw';
+  else if (
+    (playerSelection === 'rock' && computerSelection == 'paper') ||
+    (playerSelection == 'paper' && computerSelection == 'scissors') ||
+    (playerSelection == 'scissors' && computerSelection == 'rock')
+  )
+    return 'lose';
+  else return 'win';
 }
 
+function getRandomSelection() {
+  const selections = ['rock', 'paper', 'scissors'];
+  return selections[Math.floor(Math.random() * 3)];
+}
+
+function changeScoreBoard(playerScore, computerScore) {
+  scoreBoard.textContent = `Player: ${playerScore} | Computer: ${computerScore}`;
+}
+
+function annouceRoundResult(result) {
+  const p = document.createElement('p');
+  p.classList.add('roundResult');
+  p.textContent = `Player ${result} this round`;
+  roundResult.insertBefore(p, roundResult.firstElementChild);
+}
+
+function removeSelectedClass() {
+  const selectedBtns = document.querySelectorAll('.selected');
+  selectedBtns.forEach((btn) => btn.classList.remove('selected'));
+}
+
+async function playRound(playerSelection, playerScore, computerScore) {
+  const computerSelection = getRandomSelection();
+  const selectedComputerBtn = document.querySelector(
+    `.side--computer [data-select="${computerSelection}"]`
+  );
+  selectedComputerBtn.classList.add('selected');
+
+  const result = getRoundResult(playerSelection, computerSelection);
+  switch (result) {
+    case 'win':
+      playerScore++;
+      break;
+    case 'lose':
+      computerScore++;
+      break;
+    case 'draw':
+      break;
+  }
+
+  changeScoreBoard(playerScore, computerScore);
+  annouceRoundResult(result);
+  setTimeout(removeSelectedClass, 1000);
+  return [playerScore, computerScore];
+}
 
 function capitalize(str) {
   let arrayStr = [...str.toLowerCase()];
   arrayStr[0] = arrayStr[0].toUpperCase();
-  return arrayStr.join("");
-
+  return arrayStr.join('');
 }
 
-function computerPlay() {
-  let dice = Math.random() * 3;
-  if (dice < 1) return "Rock";
-  else if (dice < 2) return "Paper";
-  else return "Scissors";
+function getWinner(playerScore, computerScore, threshold) {
+  if (playerScore === threshold) return 'player';
+  else if (computerScore === threshold) return 'computer';
+  else return 'none';
 }
 
-function resetGame() {
-  playerScore = 0;
-  computeScore = 0;
-  const div = document.querySelector('div.results');
-  div.textContent = `Player score: ${playerScore}, computer score: ${computeScore}`;
+function annouceWinner(winner) {
+  if (winner === 'player') {
+    resultDiv.textContent = `You're the best. You beat him !!!`;
+  } else {
+    resultDiv.textContent = `Good luck next time`;
+  }
 }
 
-const buttons = document.querySelectorAll('button.play');
+function game() {
+  let playerScore = 0;
+  let computerScore = 0;
+  const THRESHOLD = 3;
 
+  function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    resultDiv.textContent = '';
+    roundResult.textContent = '';
+    changeScoreBoard(playerScore, computerScore);
+  }
 
+  reset.addEventListener('click', resetGame);
+  selections.forEach((selection) => {
+    selection.addEventListener('click', async (e) => {
+      e.target.classList.add('selected');
+      let winner = 'none';
+      const playerSelection = e.target.dataset.select;
+      [playerScore, computerScore] = await playRound(
+        playerSelection,
+        playerScore,
+        computerScore
+      );
 
-buttons.forEach(button => {
-  button.addEventListener('click', playRound);
-})
+      winner = getWinner(playerScore, computerScore, THRESHOLD);
+      if (winner !== 'none') {
+        annouceWinner(winner);
+      }
+    });
+  });
+}
 
-const reset = document.querySelector(`button[name="Reset"]`);
-reset.addEventListener('click', resetGame);
-
-
+game();
